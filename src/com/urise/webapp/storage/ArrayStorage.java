@@ -8,7 +8,8 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private final Resume[] storage = new Resume[10000];
+    protected static final int STORAGE_LIMIT = 10000;
+    private final Resume[] storage = new Resume[STORAGE_LIMIT];
     private int size;
 
     public void clear() {
@@ -17,9 +18,9 @@ public class ArrayStorage {
     }
 
     public void save(Resume resume) {
-        if (indexOf(resume.getUuid()) != -1) {
+        if (getIndex(resume.getUuid()) != -1) {
             System.out.println("Резюме с идентификатором " + resume.getUuid() + " уже есть в базе");
-        } else if (size == storage.length) {
+        } else if (size == STORAGE_LIMIT) {
             System.out.println("База заполнена. Резюме с идентификатором " +
                     resume.getUuid() + " не может быть добавлено");
         } else {
@@ -28,21 +29,21 @@ public class ArrayStorage {
     }
 
     public Resume get(String uuid) {
-        int index = indexOf(uuid);
-        if (index != -1) return new Resume(storage[index].getUuid());
-        System.out.println("Резюме с идентификатором " + uuid + " в базе отсутствует");
-        return null;
+        int index = getIndex(uuid);
+        if (index == -1) {
+            System.out.println("Резюме с идентификатором " + uuid + " в базе отсутствует");
+            return null;
+        }
+        return storage[index];
     }
 
     public void delete(String uuid) {
-        int index = indexOf(uuid);
-        if (index != -1) {
-            if (index < storage.length - 1) {
-                System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
-            }
-            storage[--size] = null;
-        } else {
+        int index = getIndex(uuid);
+        if (index == -1) {
             System.out.println("Резюме с идентификатором " + uuid + " в базе отсутствует");
+        } else {
+            storage[index] = storage[--size];
+            storage[size] = null;
         }
     }
 
@@ -58,7 +59,7 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        int index = indexOf(resume.getUuid());
+        int index = getIndex(resume.getUuid());
         if (index != -1) {
             storage[index] = resume;
         } else {
@@ -66,7 +67,7 @@ public class ArrayStorage {
         }
     }
 
-    private int indexOf(String uuid) {
+    private int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (uuid.equals(storage[i].getUuid())) return i;
         }
