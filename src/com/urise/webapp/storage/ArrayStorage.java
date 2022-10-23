@@ -21,8 +21,8 @@ public class ArrayStorage {
         if (getIndex(resume.getUuid()) != -1) {
             System.out.println("Резюме с идентификатором " + resume.getUuid() + " уже есть в базе");
         } else if (size == STORAGE_LIMIT) {
-            System.out.println("База заполнена. Резюме с идентификатором " +
-                    resume.getUuid() + " не может быть добавлено");
+            System.out.println("База заполнена. Резюме с идентификатором "
+                    + resume.getUuid() + " не может быть добавлено");
         } else {
             storage[size++] = resume;
         }
@@ -63,13 +63,16 @@ public class ArrayStorage {
         if (index != -1) {
             storage[index] = resume;
         } else {
-            System.out.println("Резюме с идентификатором " + resume.getUuid() + " в базе отсутствует");
+            System.out.println("Резюме с идентификатором " + resume.getUuid()
+                    + " в базе отсутствует");
         }
     }
 
     private int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (uuid.equals(storage[i].getUuid())) return i;
+            if (uuid.equals(storage[i].getUuid())) {
+                return i;
+            }
         }
         return -1;
     }
