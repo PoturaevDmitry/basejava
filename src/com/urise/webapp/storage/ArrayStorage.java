@@ -21,8 +21,8 @@ public class ArrayStorage {
         if (getIndex(resume.getUuid()) != -1) {
             System.out.println("Резюме с идентификатором " + resume.getUuid() + " уже есть в базе");
         } else if (size == STORAGE_LIMIT) {
-            System.out.println("База заполнена. Резюме с идентификатором "
-                    + resume.getUuid() + " не может быть добавлено");
+            System.out.println("База заполнена. Резюме с идентификатором " +
+                    resume.getUuid() + " не может быть добавлено");
         } else {
             storage[size++] = resume;
         }
@@ -60,11 +60,11 @@ public class ArrayStorage {
 
     public void update(Resume resume) {
         int index = getIndex(resume.getUuid());
-        if (index != -1) {
-            storage[index] = resume;
+        if (index == -1) {
+            System.out.println("Резюме с идентификатором " + resume.getUuid() +
+                    " в базе отсутствует");
         } else {
-            System.out.println("Резюме с идентификатором " + resume.getUuid()
-                    + " в базе отсутствует");
+            storage[index] = resume;
         }
     }
 
