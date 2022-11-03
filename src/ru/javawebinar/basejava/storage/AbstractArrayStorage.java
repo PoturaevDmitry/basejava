@@ -1,5 +1,8 @@
 package ru.javawebinar.basejava.storage;
 
+import ru.javawebinar.basejava.exception.ExistStorageException;
+import ru.javawebinar.basejava.exception.NotExistStorageException;
+import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
@@ -23,33 +26,30 @@ public abstract class AbstractArrayStorage implements Storage {
     public final void update(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (index < 0) {
-            System.out.println("Резюме с идентификатором " + resume.getUuid() +
-                    " в базе отсутствует");
-        } else {
-            storage[index] = resume;
+            throw new NotExistStorageException(resume.getUuid());
         }
+        storage[index] = resume;
     }
 
     @Override
     public final void save(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (index >= 0) {
-            System.out.println("Резюме с идентификатором " + resume.getUuid() + " уже есть в базе");
-        } else if (size == STORAGE_LIMIT) {
-            System.out.println("База заполнена. Резюме с идентификатором " +
-                    resume.getUuid() + " не может быть добавлено");
-        } else {
-            insertResume(index, resume);
-            size++;
+            throw new ExistStorageException(resume.getUuid());
         }
+        if (size == STORAGE_LIMIT) {
+            throw new StorageException("База заполнена. Резюме с идентификатором " +
+                    resume.getUuid() + " не может быть добавлено", resume.getUuid());
+        }
+        insertResume(index, resume);
+        size++;
     }
 
     @Override
     public final Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            System.out.println("Резюме с идентификатором " + uuid + " в базе отсутствует");
-            return null;
+            throw new NotExistStorageException(uuid);
         }
         return storage[index];
     }
@@ -58,12 +58,11 @@ public abstract class AbstractArrayStorage implements Storage {
     public final void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            System.out.println("Резюме с идентификатором " + uuid + " в базе отсутствует");
-        } else {
-            deleteResume(index);
-            storage[size - 1] = null;
-            size--;
+            throw new NotExistStorageException(uuid);
         }
+        deleteResume(index);
+        storage[size - 1] = null;
+        size--;
     }
 
     @Override

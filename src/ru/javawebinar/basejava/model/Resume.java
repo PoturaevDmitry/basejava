@@ -1,6 +1,6 @@
 package ru.javawebinar.basejava.model;
 
-import java.util.Objects;
+import java.util.UUID;
 
 /**
  * ru.javawebinar.basejava.model.Resume class
@@ -8,7 +8,11 @@ import java.util.Objects;
 public class Resume implements Comparable<Resume> {
 
     // Unique identifier
-    private String uuid;
+    private final String uuid;
+
+    public Resume() {
+        this(UUID.randomUUID().toString());
+    }
 
     public Resume(String uuid) {
         this.uuid = uuid;
@@ -33,7 +37,7 @@ public class Resume implements Comparable<Resume> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid);
+        return uuid.hashCode();
     }
 
     @Override
