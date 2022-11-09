@@ -95,12 +95,7 @@ class AbstractArrayStorageTest {
     void delete() {
         storage.delete(UUID_1);
         assertSize(2);
-        try {
-            storage.delete(UUID_1);
-            Assertions.fail();
-        } catch (NotExistStorageException e) {
-            Assertions.assertNotNull(e);
-        }
+        Assertions.assertThrows(NotExistStorageException.class, () -> storage.delete(UUID_1));
     }
 
     @Test
@@ -110,7 +105,7 @@ class AbstractArrayStorageTest {
 
     @Test
     void getAll() {
-        Resume[] expected = {new Resume(UUID_1), new Resume(UUID_2), new Resume(UUID_3)};
+        Resume[] expected = {RESUME_1, RESUME_2, RESUME_3};
         Resume[] actual = storage.getAll();
         assertSize(actual.length);
         Assertions.assertArrayEquals(expected, actual);
