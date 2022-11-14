@@ -8,47 +8,53 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public final void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
-        updateResume(index, resume);
+        Object key = getExistingSearchKey(resume.getUuid());
+        updateResume(key, resume);
     }
 
     @Override
     public final void save(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
-        }
-        insertResume(index, resume);
+        Object key = getNotExistingSearchKey(resume.getUuid());
+        insertResume(key, resume);
     }
 
     @Override
     public final Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
-        return getResume(index);
+        Object key = getExistingSearchKey(uuid);
+        return getResume(key);
     }
 
     @Override
     public final void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
-        deleteResume(index);
+        Object key = getExistingSearchKey(uuid);
+        deleteResume(key);
     }
 
-    protected abstract int getIndex(String uuid);
+    protected abstract Object getSearchKey(String uuid);
 
-    protected abstract void updateResume(int index, Resume resume);
+    protected abstract void updateResume(Object key, Resume resume);
 
-    protected abstract void insertResume(int index, Resume resume);
+    protected abstract void insertResume(Object key, Resume resume);
 
-    protected abstract void deleteResume(int index);
+    protected abstract void deleteResume(Object key);
 
-    protected abstract Resume getResume(int index);
+    protected abstract Resume getResume(Object key);
+
+    protected abstract boolean isExist(Object searchKey);
+
+    private Object getExistingSearchKey(String uuid) {
+        Object key = getSearchKey(uuid);
+        if (!isExist(key)) {
+            throw new NotExistStorageException(uuid);
+        }
+        return key;
+    }
+
+    private Object getNotExistingSearchKey(String uuid) {
+        Object key = getSearchKey(uuid);
+        if (isExist(key)) {
+            throw new ExistStorageException(uuid);
+        }
+        return key;
+    }
 }

@@ -31,33 +31,43 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected final void insertResume(int index, Resume resume) {
+    protected final void insertResume(Object key, Resume resume) {
         if (size() == STORAGE_LIMIT) {
             throw new StorageException("База заполнена. Резюме с идентификатором " +
                     resume.getUuid() + " не может быть добавлено", resume.getUuid());
         }
+        int index = (Integer) key;
         insertToArrayStorage(index, resume);
         size++;
     }
 
     @Override
-    protected final void deleteResume(int index) {
+    protected final void deleteResume(Object key) {
+        int index = (Integer) key;
         deleteFromArrayStorage(index);
         storage[size - 1] = null;
         size--;
     }
 
     @Override
-    protected void updateResume(int index, Resume resume) {
+    protected void updateResume(Object key, Resume resume) {
+        int index = (Integer) key;
         storage[index] = resume;
     }
 
     @Override
-    protected Resume getResume(int index) {
+    protected Resume getResume(Object key) {
+        int index = (Integer) key;
         return storage[index];
     }
 
     protected abstract void insertToArrayStorage(int index, Resume resume);
 
     protected abstract void deleteFromArrayStorage(int index);
+
+    @Override
+    protected boolean isExist(Object searchKey) {
+        int index = (Integer) searchKey;
+        return index >= 0 && index < size;
+    }
 }
