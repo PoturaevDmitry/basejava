@@ -1,7 +1,7 @@
 package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.storage.ListStorage;
+import ru.javawebinar.basejava.storage.MapStorage;
 import ru.javawebinar.basejava.storage.Storage;
 
 import java.io.BufferedReader;
@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
  * Test for ru.javawebinar.basejava.storage.ArrayStorage
  */
 public class MainArray {
-    private static final Storage ARRAY_STORAGE = new ListStorage();
+    private static final Storage STORAGE = new MapStorage();
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -34,27 +34,27 @@ public class MainArray {
                     printAll();
                     break;
                 case "size":
-                    System.out.println(ARRAY_STORAGE.size());
+                    System.out.println(STORAGE.size());
                     break;
                 case "save":
                     resume = new Resume(uuid);
-                    ARRAY_STORAGE.save(resume);
+                    STORAGE.save(resume);
                     printAll();
                     break;
                 case "update":
                     resume = new Resume(uuid);
-                    ARRAY_STORAGE.update(resume);
+                    STORAGE.update(resume);
                     printAll();
                     break;
                 case "delete":
-                    ARRAY_STORAGE.delete(uuid);
+                    STORAGE.delete(uuid);
                     printAll();
                     break;
                 case "get":
-                    System.out.println(ARRAY_STORAGE.get(uuid));
+                    System.out.println(STORAGE.get(uuid));
                     break;
                 case "clear":
-                    ARRAY_STORAGE.clear();
+                    STORAGE.clear();
                     printAll();
                     break;
                 case "exit":
@@ -67,7 +67,7 @@ public class MainArray {
     }
 
     static void printAll() {
-        Resume[] all = ARRAY_STORAGE.getAll();
+        Resume[] all = STORAGE.getAll();
         System.out.println("----------------------------");
         if (all.length == 0) {
             System.out.println("Empty");

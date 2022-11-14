@@ -61,13 +61,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return storage[index];
     }
 
-    protected abstract void insertToArrayStorage(int index, Resume resume);
-
-    protected abstract void deleteFromArrayStorage(int index);
-
     @Override
     protected boolean isExist(Object searchKey) {
         int index = (Integer) searchKey;
         return index >= 0 && index < size;
     }
+
+    protected abstract void insertToArrayStorage(int index, Resume resume);
+
+    protected abstract void deleteFromArrayStorage(int index);
 }
