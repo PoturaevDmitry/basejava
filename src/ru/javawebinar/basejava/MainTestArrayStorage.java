@@ -8,35 +8,35 @@ import ru.javawebinar.basejava.storage.Storage;
  * Test ru.javawebinar.basejava.storage.ArrayStorage
  */
 public class MainTestArrayStorage {
-    static final Storage ARRAY_STORAGE = new SortedArrayStorage();
+    static final Storage STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) {
         Resume resume1 = new Resume("uuid3");
         Resume resume2 = new Resume("uuid1");
         Resume resume3 = new Resume("uuid2");
 
-        ARRAY_STORAGE.save(resume1);
-        ARRAY_STORAGE.save(resume2);
-        ARRAY_STORAGE.save(resume3);
+        STORAGE.save(resume1);
+        STORAGE.save(resume2);
+        STORAGE.save(resume3);
 
-        System.out.println("Get r1: " + ARRAY_STORAGE.get(resume1.getUuid()));
-        System.out.println("Size: " + ARRAY_STORAGE.size());
+        System.out.println("Get r1: " + STORAGE.get(resume1.getUuid()));
+        System.out.println("Size: " + STORAGE.size());
 
-        System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
+        System.out.println("Get dummy: " + STORAGE.get("dummy"));
 
         printAll();
-        ARRAY_STORAGE.update(new Resume("dummy"));
-        ARRAY_STORAGE.delete(resume1.getUuid());
+        STORAGE.update(new Resume("dummy"));
+        STORAGE.delete(resume1.getUuid());
         printAll();
-        ARRAY_STORAGE.clear();
+        STORAGE.clear();
         printAll();
 
-        System.out.println("Size: " + ARRAY_STORAGE.size());
+        System.out.println("Size: " + STORAGE.size());
     }
 
     static void printAll() {
         System.out.println("\nGet All");
-        for (Resume resume : ARRAY_STORAGE.getAll()) {
+        for (Resume resume : STORAGE.getAllSorted()) {
             System.out.println(resume);
         }
     }
