@@ -17,10 +17,14 @@ class AbstractStorageTest {
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
     private static final String UUID_NOT_EXIST = "dummy";
-    protected static final Resume RESUME_1 = new Resume(UUID_1);
-    protected static final Resume RESUME_2 = new Resume(UUID_2);
-    protected static final Resume RESUME_3 = new Resume(UUID_3);
-    protected static final Resume RESUME_4 = new Resume(UUID_4);
+    private static final String FULL_NAME_1 = "A";
+    private static final String FULL_NAME_2 = "B";
+    private static final String FULL_NAME_3 = "C";
+    private static final String FULL_NAME_EMPTY = "";
+    protected static final Resume RESUME_1 = new Resume(UUID_1, FULL_NAME_EMPTY);
+    protected static final Resume RESUME_2 = new Resume(UUID_2, FULL_NAME_EMPTY);
+    protected static final Resume RESUME_3 = new Resume(UUID_3, FULL_NAME_EMPTY);
+    protected static final Resume RESUME_4 = new Resume(UUID_4, FULL_NAME_EMPTY);
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -45,7 +49,7 @@ class AbstractStorageTest {
 
     @Test
     public void updateTest() {
-        Resume resume = new Resume(UUID_1);
+        Resume resume = new Resume(UUID_1, FULL_NAME_EMPTY);
         storage.update(resume);
         Assertions.assertSame(resume, storage.get(resume.getUuid()));
     }
@@ -65,7 +69,7 @@ class AbstractStorageTest {
 
     @Test
     public void saveWhenResumeExistTest() {
-        Resume resume = new Resume(UUID_3);
+        Resume resume = new Resume(UUID_3, FULL_NAME_EMPTY);
         Assertions.assertThrows(ExistStorageException.class, () -> storage.save(resume));
     }
 
@@ -95,9 +99,9 @@ class AbstractStorageTest {
 
     @Test
     public void getAllSortedByNameTest() {
-        RESUME_1.setFullName("A");
-        RESUME_2.setFullName("B");
-        RESUME_3.setFullName("C");
+        RESUME_1.setFullName(FULL_NAME_1);
+        RESUME_2.setFullName(FULL_NAME_2);
+        RESUME_3.setFullName(FULL_NAME_3);
         List<Resume> expected = List.of(RESUME_1, RESUME_2, RESUME_3);
         List<Resume> actual = storage.getAllSorted();
         assertSize(actual.size());
@@ -106,9 +110,9 @@ class AbstractStorageTest {
 
     @Test
     public void getAllSortedByUuidTest() {
-        RESUME_1.setFullName("");
-        RESUME_2.setFullName("");
-        RESUME_3.setFullName("");
+        RESUME_1.setFullName(FULL_NAME_EMPTY);
+        RESUME_2.setFullName(FULL_NAME_EMPTY);
+        RESUME_3.setFullName(FULL_NAME_EMPTY);
         List<Resume> expected = List.of(RESUME_1, RESUME_2, RESUME_3);
         List<Resume> actual = storage.getAllSorted();
         assertSize(actual.size());

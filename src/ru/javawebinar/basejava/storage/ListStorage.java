@@ -4,6 +4,7 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class ListStorage extends AbstractStorage {
 
@@ -59,7 +60,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume[] getAllResume() {
-        return storage.toArray(new Resume[0]);
+    protected Stream<Resume> getAllResumes() {
+        return storage.stream();
     }
 }
