@@ -6,7 +6,6 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
 
 public abstract class AbstractStorage implements Storage {
 
@@ -36,12 +35,9 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public final List<Resume> getAllSorted() {
-        return getAllResumes()
-                .map(Resume::new)
-                .sorted(Comparator
-                        .comparing(Resume::getFullName)
-                        .thenComparing(Resume::getUuid))
-                .toList();
+        List<Resume> resumes = getAllResumes();
+        resumes.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
+        return resumes;
     }
 
     private Object getExistingSearchKey(String uuid) {
@@ -72,5 +68,5 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract boolean isExist(Object searchKey);
 
-    protected abstract Stream<Resume> getAllResumes();
+    protected abstract List<Resume> getAllResumes();
 }
