@@ -4,20 +4,20 @@ import ru.javawebinar.basejava.model.Resume;
 
 import static java.util.Objects.nonNull;
 
-public class MapResumeStorage extends AbstractMapStorage {
+public class MapResumeStorage extends AbstractMapStorage<Resume> {
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected Resume getSearchKey(String uuid) {
         return storage.get(uuid);
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
+    protected boolean isExist(Resume searchKey) {
         return searchKey != null;
     }
 
     @Override
-    protected String getMapKey(Object key, Resume resume) {
-        return nonNull(key) ? ((Resume) key).getUuid() : resume.getUuid();
+    protected String getMapKey(Resume key, Resume resume) {
+        return nonNull(key) ? key.getUuid() : resume.getUuid();
     }
 }

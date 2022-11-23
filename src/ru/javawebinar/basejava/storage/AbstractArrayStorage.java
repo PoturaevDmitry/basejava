@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Array based storage for Resumes
  */
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10000;
 
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
@@ -27,40 +27,35 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected final void insertResume(Object key, Resume resume) {
+    protected final void insertResume(Integer key, Resume resume) {
         if (size() == STORAGE_LIMIT) {
             throw new StorageException("База заполнена. Резюме с идентификатором " +
                     resume.getUuid() + " не может быть добавлено", resume.getUuid());
         }
-        int index = (Integer) key;
-        insertToArrayStorage(index, resume);
+        insertToArrayStorage(key, resume);
         size++;
     }
 
     @Override
-    protected final void deleteResume(Object key) {
-        int index = (Integer) key;
-        deleteFromArrayStorage(index);
+    protected final void deleteResume(Integer key) {
+        deleteFromArrayStorage(key);
         storage[size - 1] = null;
         size--;
     }
 
     @Override
-    protected void updateResume(Object key, Resume resume) {
-        int index = (Integer) key;
-        storage[index] = resume;
+    protected void updateResume(Integer key, Resume resume) {
+        storage[key] = resume;
     }
 
     @Override
-    protected Resume getResume(Object key) {
-        int index = (Integer) key;
-        return storage[index];
+    protected Resume getResume(Integer key) {
+        return storage[key];
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
-        int index = (Integer) searchKey;
-        return index >= 0 && index < size;
+    protected boolean isExist(Integer searchKey) {
+        return searchKey >= 0 && searchKey < size;
     }
 
     @Override

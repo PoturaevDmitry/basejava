@@ -7,29 +7,29 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage<SK> implements Storage {
 
     @Override
     public final void update(Resume resume) {
-        Object key = getExistingSearchKey(resume.getUuid());
+        SK key = getExistingSearchKey(resume.getUuid());
         updateResume(key, resume);
     }
 
     @Override
     public final void save(Resume resume) {
-        Object key = getNotExistingSearchKey(resume.getUuid());
+        SK key = getNotExistingSearchKey(resume.getUuid());
         insertResume(key, resume);
     }
 
     @Override
     public final Resume get(String uuid) {
-        Object key = getExistingSearchKey(uuid);
+        SK key = getExistingSearchKey(uuid);
         return getResume(key);
     }
 
     @Override
     public final void delete(String uuid) {
-        Object key = getExistingSearchKey(uuid);
+        SK key = getExistingSearchKey(uuid);
         deleteResume(key);
     }
 
@@ -40,33 +40,33 @@ public abstract class AbstractStorage implements Storage {
         return resumes;
     }
 
-    private Object getExistingSearchKey(String uuid) {
-        Object key = getSearchKey(uuid);
+    private SK getExistingSearchKey(String uuid) {
+        SK key = getSearchKey(uuid);
         if (!isExist(key)) {
             throw new NotExistStorageException(uuid);
         }
         return key;
     }
 
-    private Object getNotExistingSearchKey(String uuid) {
-        Object key = getSearchKey(uuid);
+    private SK getNotExistingSearchKey(String uuid) {
+        SK key = getSearchKey(uuid);
         if (isExist(key)) {
             throw new ExistStorageException(uuid);
         }
         return key;
     }
 
-    protected abstract Object getSearchKey(String uuid);
+    protected abstract SK getSearchKey(String uuid);
 
-    protected abstract void updateResume(Object key, Resume resume);
+    protected abstract void updateResume(SK key, Resume resume);
 
-    protected abstract void insertResume(Object key, Resume resume);
+    protected abstract void insertResume(SK key, Resume resume);
 
-    protected abstract void deleteResume(Object key);
+    protected abstract void deleteResume(SK key);
 
-    protected abstract Resume getResume(Object key);
+    protected abstract Resume getResume(SK key);
 
-    protected abstract boolean isExist(Object searchKey);
+    protected abstract boolean isExist(SK searchKey);
 
     protected abstract List<Resume> getAllResumes();
 }
