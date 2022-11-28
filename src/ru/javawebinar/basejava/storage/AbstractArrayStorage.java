@@ -28,7 +28,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
 
     @Override
     protected final void insertResume(Integer key, Resume resume) {
-        if (size() == STORAGE_LIMIT) {
+        if (size == STORAGE_LIMIT) {
+            LOG.warning("Storage overflow " + resume);
             throw new StorageException("База заполнена. Резюме с идентификатором " +
                     resume.getUuid() + " не может быть добавлено", resume.getUuid());
         }
