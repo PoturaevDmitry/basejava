@@ -2,7 +2,6 @@ package ru.javawebinar.basejava.model;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class ResumeTestData {
 
@@ -120,36 +119,11 @@ public class ResumeTestData {
                 case EXPERIENCE, EDUCATION -> {
                     OrganizationSection organizationSection = (OrganizationSection) entry.getValue();
                     for (var organization : organizationSection.getOrganizations()) {
-                        System.out.print(organization.getName());
-                        String webSite = organization.getWebsite();
-                        System.out.println(Objects.nonNull(webSite) ? " " + webSite : "");
-
-                        for (var period : organization.getPeriods()) {
-                            printRangeDate(period);
-                            System.out.println(period.getTitle());
-                            if (Objects.nonNull(period.getDescription())) {
-                                System.out.println(period.getDescription());
-                            }
-                        }
+                        organization.show();
                         System.out.println();
                     }
                 }
             }
-        }
-    }
-
-    private static void printRangeDate(Period period) {
-        printDate(period.getStart());
-        System.out.print(" - ");
-        printDate(period.getEnd());
-        System.out.println();
-    }
-
-    private static void printDate(LocalDate date) {
-        if (Objects.nonNull(date)) {
-            System.out.printf("%02d%s%d", date.getMonth().getValue(), "/", date.getYear());
-        } else {
-            System.out.print("Сейчас");
         }
     }
 }

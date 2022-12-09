@@ -12,24 +12,38 @@ public class Organization {
 
     public Organization(String name, String website) {
         Objects.requireNonNull(name);
-         this.name = name;
+        this.name = name;
         this.website = website;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public List<Period> getPeriods() {
-        return periods;
     }
 
     public void addPeriod(String title, String description, LocalDate start, LocalDate end) {
         periods.add(new Period(title, description, start, end));
+    }
+
+    public void show() {
+        System.out.println(name + (Objects.nonNull(website) ? " " + website : ""));
+        for (var period : periods) {
+            printRangeDate(period);
+            System.out.println(period.title());
+            if (Objects.nonNull(period.description())) {
+                System.out.println(period.description());
+            }
+        }
+    }
+
+    private static void printRangeDate(Period period) {
+        printDate(period.start());
+        System.out.print(" - ");
+        printDate(period.end());
+        System.out.println();
+    }
+
+    private static void printDate(LocalDate date) {
+        if (Objects.nonNull(date)) {
+            System.out.printf("%02d%s%d", date.getMonth().getValue(), "/", date.getYear());
+        } else {
+            System.out.print("Сейчас");
+        }
     }
 
     @Override
@@ -59,5 +73,44 @@ public class Organization {
         result = 31 * result + (website != null ? website.hashCode() : 0);
         result = 31 * result + periods.hashCode();
         return result;
+    }
+
+    private record Period(String title, String description, LocalDate start, LocalDate end) {
+        public Period {
+            Objects.requireNonNull(title);
+        }
+
+        @Override
+        public String toString() {
+            return "Period{" +
+                    "title='" + title + '\'' +
+                    ", description='" + description + '\'' +
+                    ", start=" + start +
+                    ", end=" + end +
+                    '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Period period = (Period) o;
+
+            if (!title.equals(period.title)) return false;
+            if (!Objects.equals(description, period.description))
+                return false;
+            if (!Objects.equals(start, period.start)) return false;
+            return Objects.equals(end, period.end);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = title.hashCode();
+            result = 31 * result + (description != null ? description.hashCode() : 0);
+            result = 31 * result + (start != null ? start.hashCode() : 0);
+            result = 31 * result + (end != null ? end.hashCode() : 0);
+            return result;
+        }
     }
 }
