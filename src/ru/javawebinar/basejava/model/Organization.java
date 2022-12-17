@@ -1,6 +1,7 @@
 package ru.javawebinar.basejava.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -23,7 +24,7 @@ public class Organization {
     public void show() {
         System.out.println(name + (Objects.nonNull(website) ? " " + website : ""));
         for (var period : periods) {
-            printRangeDate(period);
+            printPeriod(period);
             System.out.println(period.title());
             if (Objects.nonNull(period.description())) {
                 System.out.println(period.description());
@@ -31,7 +32,7 @@ public class Organization {
         }
     }
 
-    private static void printRangeDate(Period period) {
+    private static void printPeriod(Period period) {
         printDate(period.start());
         System.out.print(" - ");
         printDate(period.end());
@@ -40,7 +41,7 @@ public class Organization {
 
     private static void printDate(LocalDate date) {
         if (Objects.nonNull(date)) {
-            System.out.printf("%02d%s%d", date.getMonth().getValue(), "/", date.getYear());
+            System.out.print(date.format(DateTimeFormatter.ofPattern("MM/yy")));
         } else {
             System.out.print("Сейчас");
         }
@@ -76,7 +77,7 @@ public class Organization {
     }
 
     private record Period(String title, String description, LocalDate start, LocalDate end) {
-        public Period {
+        Period {
             Objects.requireNonNull(title);
         }
 
