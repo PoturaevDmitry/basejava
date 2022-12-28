@@ -24,26 +24,11 @@ public class Organization {
     public void show() {
         System.out.println(name + (Objects.nonNull(website) ? " " + website : ""));
         for (var period : periods) {
-            printPeriod(period);
+            Period.print(period);
             System.out.println(period.title());
             if (Objects.nonNull(period.description())) {
                 System.out.println(period.description());
             }
-        }
-    }
-
-    private static void printPeriod(Period period) {
-        printDate(period.start());
-        System.out.print(" - ");
-        printDate(period.end());
-        System.out.println();
-    }
-
-    private static void printDate(LocalDate date) {
-        if (Objects.nonNull(date)) {
-            System.out.print(date.format(DateTimeFormatter.ofPattern("MM/yy")));
-        } else {
-            System.out.print("Сейчас");
         }
     }
 
@@ -77,8 +62,19 @@ public class Organization {
     }
 
     private record Period(String title, String description, LocalDate start, LocalDate end) {
+        private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MM'/'yy");
+        private static final String DEFAULT_DATE = "Сейчас";
+
         Period {
             Objects.requireNonNull(title);
+        }
+
+        private static void print(Period period) {
+            String startDate = Objects.nonNull(period.start()) ?
+                    period.start().format(DATE_FORMATTER) : DEFAULT_DATE;
+            String endDate = Objects.nonNull(period.end()) ?
+                    period.end().format(DATE_FORMATTER) : DEFAULT_DATE;
+            System.out.println(startDate + " - " + endDate);
         }
 
         @Override
